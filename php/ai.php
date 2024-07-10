@@ -7,7 +7,7 @@ if (!isset($_SESSION['logged_in']) || !$_SESSION['logged_in']) {
     exit();
 }
 
-$username = $_SESSION['username']; // Ambil username dari sesi
+$username = $_SESSION['username']; 
 $status = $_SESSION['status'];
 ?>
 
