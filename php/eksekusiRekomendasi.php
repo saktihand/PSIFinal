@@ -5,7 +5,7 @@ use LucianoTonet\GroqPHP\Groq;
 require '../vendor/autoload.php'; // Pastikan path ke autoload.php sesuai
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Ambil data dari form rekomendasi.php
+    
     $productType = $_POST['product-type'] ?? '';
     $skinProblems = $_POST['skin-problem'] ?? [];
     $mainIngredient = $_POST['main-ingredient'] ?? '';
@@ -13,7 +13,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $marketingTargets = $_POST['marketing-target'] ?? [];
     $marketingStrategy = $_POST['marketing-strategy'] ?? '';
 
-    // Buat prompt untuk Groq berdasarkan input pengguna dalam bahasa Indonesia
     $prompt = "Saya mencari rekomendasi produk perawatan kulit yang sesuai dengan detail berikut:
     - Jenis kulit: $productType
     - Masalah kulit: " . implode(', ', $skinProblems) . "
@@ -31,12 +30,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     Pastikan respons diberikan dalam bahasa Indonesia.";
 
     try {
-        // Inisialisasi Groq client dengan API key Anda
-        $groq = new Groq('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'); // Ganti dengan API key Groq Anda
+        
+        $groq = new Groq('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');
 
-        // Lakukan permintaan kompletasi obrolan
         $chatCompletion = $groq->chat()->completions()->create([
-            'model'    => 'mixtral-8x7b-32768', // Ganti dengan model yang Anda inginkan
+            'model'    => 'mixtral-8x7b-32768', 
             'messages' => [
                 [
                     'role'    => 'user',
@@ -44,11 +42,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ],
             ],
         ]);
-
-        // Akses elemen array secara langsung dengan penanganan pengecekan
+        
         $recommendations = isset($chatCompletion['choices'][0]['message']['content']) ? $chatCompletion['choices'][0]['message']['content'] : 'Tidak ada rekomendasi yang tersedia saat ini.';
 
-        // Redirect ke halaman hasil.php dengan hasil rekomendasi
         header("Location: hasil.php?recommendations=" . urlencode($recommendations));
         exit();
     } catch (Exception $e) {
@@ -57,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit();
     }
 } else {
-    // Redirect jika metode permintaan bukan POST
+   
     header("Location: rekomendasi.php?error=invalid_method");
     exit();
 }
